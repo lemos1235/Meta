@@ -59,13 +59,13 @@ type inetDiagResponse struct {
 	INode   uint32
 }
 
-func findProcessName(network string, ip netip.Addr, srcPort int) (uint32, string, error) {
+func findProcessName(network string, ip netip.Addr, srcPort int) (uint32, uint32, string, error) {
 	uid, inode, err := resolveSocketByNetlink(network, ip, srcPort)
 	if err != nil {
-		return 0, "", err
+		return 0, 0, "", err
 	}
 	pp, err := resolveProcessNameByProcSearch(inode, uid)
-	return uid, pp, err
+	return uid, 0, pp, err
 }
 
 func resolveSocketByNetlink(network string, ip netip.Addr, srcPort int) (uint32, uint32, error) {

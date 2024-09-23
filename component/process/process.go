@@ -18,7 +18,7 @@ const (
 	UDP = "udp"
 )
 
-func FindProcessName(network string, srcIP netip.Addr, srcPort int) (uint32, string, error) {
+func FindProcessName(network string, srcIP netip.Addr, srcPort int) (uint32, uint32, string, error) {
 	return findProcessName(network, srcIP, srcPort)
 }
 

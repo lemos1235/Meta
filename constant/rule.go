@@ -26,6 +26,7 @@ const (
 	ProcessPath
 	ProcessNameRegex
 	ProcessPathRegex
+	Pid
 	RuleSet
 	Network
 	Uid
@@ -86,6 +87,8 @@ func (rt RuleType) String() string {
 		return "ProcessNameRegex"
 	case ProcessPathRegex:
 		return "ProcessPathRegex"
+	case Pid:
+		return "Pid"
 	case MATCH:
 		return "Match"
 	case RuleSet:

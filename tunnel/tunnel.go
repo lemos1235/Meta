@@ -623,13 +623,14 @@ func match(metadata *C.Metadata) (C.Proxy, C.Rule, error) {
 			attemptProcessLookup = false
 			if !features.CMFA {
 				// normal check for process
-				uid, path, err := P.FindProcessName(metadata.NetWork.String(), metadata.SrcIP, int(metadata.SrcPort))
+				uid, pid, path, err := P.FindProcessName(metadata.NetWork.String(), metadata.SrcIP, int(metadata.SrcPort))
 				if err != nil {
 					log.Debugln("[Process] find process error for %s: %v", metadata.String(), err)
 				} else {
 					metadata.Process = filepath.Base(path)
 					metadata.ProcessPath = path
 					metadata.Uid = uid
+					metadata.Pid = pid
 
 					if pkg, err := P.FindPackageName(metadata); err == nil { // for android (not CMFA) package names
 						metadata.Process = pkg

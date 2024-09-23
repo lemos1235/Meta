@@ -1,6 +1,7 @@
 package common
 
 import (
+	"strconv"
 	"strings"
 
 	C "github.com/metacubex/mihomo/constant"
@@ -14,9 +15,13 @@ type Process struct {
 	process  string
 	nameOnly bool
 	regexp   *regexp2.Regexp
+	pid      bool
 }
 
 func (ps *Process) RuleType() C.RuleType {
+	if ps.pid {
+		return C.Pid
+	}
 	if ps.nameOnly {
 		if ps.regexp != nil {
 			return C.ProcessNameRegex
@@ -31,6 +36,14 @@ func (ps *Process) RuleType() C.RuleType {
 }
 
 func (ps *Process) Match(metadata *C.Metadata) (bool, string) {
+	if ps.pid {
+		processID, err := strconv.Atoi(ps.process)
+		if err != nil {
+			return false, ps.adapter
+		}
+		return int(metadata.Pid) == processID, ps.adapter
+	}
+
 	if ps.nameOnly {
 		if ps.regexp != nil {
 			match, _ := ps.regexp.MatchString(metadata.Process)
@@ -58,7 +71,7 @@ func (ps *Process) ShouldFindProcess() bool {
 	return true
 }
 
-func NewProcess(process string, adapter string, nameOnly bool, regex bool) (*Process, error) {
+func NewProcess(process string, adapter string, nameOnly bool, regex bool, pid bool) (*Process, error) {
 	var r *regexp2.Regexp
 	var err error
 	if regex {
@@ -73,5 +86,6 @@ func NewProcess(process string, adapter string, nameOnly bool, regex bool) (*Pro
 		process:  process,
 		nameOnly: nameOnly,
 		regexp:   r,
+		pid:      pid,
 	}, nil
 }

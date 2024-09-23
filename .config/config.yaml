@@ -1,0 +1,16 @@
+mixed-port: 5100
+find-process-mode: strict
+tun:
+  enable: false
+  stack: mixed
+proxies:
+  - name: "PROXY"
+    type: socks5
+    server: 127.0.0.1
+    port: 7890
+  - name: "Direct"
+    type: direct
+    udp: true
+rules:
+  - PROCESS-NAME,curl,PROXY
+  - PID,3459,PROXY
